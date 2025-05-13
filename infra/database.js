@@ -9,3 +9,5 @@ async function query() {
         database: process.env.POSTGRES_DB
     })
 }
+
+export default query;
