@@ -1,14 +1,9 @@
 import migrationsRunner from "node-pg-migrate";
-import { join } from "node:path";
-import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
+import { join, resolve } from "node:path";
 import database from "infra/database";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const defaultMigrationsOptions = {
-  dir: join(__dirname, "../../../../infra", "migrations"),
+  dir: join(resolve("."), "infra", "migrations"),
   databaseUrl: process.env.DATABASE_URL,
   direction: "up",
   verbose: true,
@@ -16,16 +11,23 @@ const defaultMigrationsOptions = {
 };
 
 export async function GET(req) {
-  const dbClient = await database.getNewClient();
-  const pendingMigrations = await migrationsRunner({
-    ...defaultMigrationsOptions,
-    dbClient,
-    dryRun: true,
-  });
+  let dbClient;
 
-  await dbClient.end();
+  try {
+    dbClient = await database.getNewClient();
+    const pendingMigrations = await migrationsRunner({
+      ...defaultMigrationsOptions,
+      dbClient,
+      dryRun: true,
+    });
 
-  return Response.json(pendingMigrations);
+    return Response.json(pendingMigrations);
+  } catch (error) {
+    console.error("Migration error:", error);
+    return Response.json({ error: "Migration failed" }, { status: 500 });
+  } finally {
+    await dbClient.end();
+  }
 }
 
 export async function POST(req) {
