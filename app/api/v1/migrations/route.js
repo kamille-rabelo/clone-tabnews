@@ -1,9 +1,14 @@
 import migrationsRunner from "node-pg-migrate";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 import database from "infra/database";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const defaultMigrationsOptions = {
-  dir: join("infra", "migrations"),
+  dir: join(__dirname, "../../../../infra", "migrations"),
   databaseUrl: process.env.DATABASE_URL,
   direction: "up",
   verbose: true,
