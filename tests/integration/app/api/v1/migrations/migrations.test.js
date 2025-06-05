@@ -19,7 +19,7 @@ describe("api/v1/migrations", () => {
   });
 
   describe("POST", () => {
-    test("should return 200 on successful migration", async () => {
+    test("should return 201 on successful migration", async () => {
       const firstResponse = await fetch(
         "http://localhost:3000/api/v1/migrations",
         {
