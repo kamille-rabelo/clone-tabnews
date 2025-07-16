@@ -1,6 +1,11 @@
 import database from "infra/database";
+import orchestrator from "tests/orchestrator";
 
 describe("api/v1/migrations", () => {
+  beforeAll(async () => {
+    await orchestrator.waitForAllServices();
+  });
+
   beforeEach(async () => {
     await database.query(
       "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;",
