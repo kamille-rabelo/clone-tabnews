@@ -1,6 +1,6 @@
 import database from "infra/database.js";
 
-export async function GET(req) {
+export async function GET() {
   const updatedAt = new Date().toISOString();
   const queryResult = await database.query({
     text: `
