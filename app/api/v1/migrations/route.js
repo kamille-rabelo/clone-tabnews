@@ -10,7 +10,7 @@ const defaultMigrationsOptions = {
   migrationsTable: "pgmigrations",
 };
 
-export async function GET(req) {
+export async function GET() {
   let dbClient;
 
   try {
@@ -30,7 +30,7 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
+export async function POST() {
   let dbClient;
 
   try {
